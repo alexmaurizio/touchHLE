@@ -614,7 +614,13 @@ impl Dyld {
             }
         }
 
-        panic!("Call to unimplemented function {}", symbol);
+        // This will trigger when accessing functions from "unexpected dylib"
+        // TODO: Should either implement libsqlite3.dylib as original dynamically linked or at least reimplement it as stubs
+        log!(
+            "Warning: Call to unimplemented function {} - attempting continuing execution",
+            symbol
+        );
+        return;
     }
 
     /// Creates a guest function that will call a host function with the name
